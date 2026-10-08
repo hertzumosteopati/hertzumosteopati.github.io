@@ -1,0 +1,53 @@
+---
+// The about page, shared by /om/ (da) and /en/about/ (en). Copy in src/content/pages/<lang>/.
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Section from '../components/Section.astro';
+import ClinicGrid from '../components/ClinicGrid.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { getPage } from '../lib/content';
+import { routes, type Lang } from '../i18n/utils';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const page = await getPage(lang, lang === 'da' ? 'om' : 'about');
+const { Content } = await render(page);
+const d = page.data;
+---
+
+<Base title={d.title} description={d.description} lang={lang} paths={routes.about} page="about">
+  <section class="section about-hero">
+    <div class="container about-hero__grid">
+      <div class="about-hero__text">
+        <Eyebrow as="p">{d.eyebrow}</Eyebrow>
+        <h1 class="display-xl about-hero__title">{d.headline}</h1>
+        <p class="heading about-hero__credentials">{d.lead}</p>
+        <div class="body prose about-hero__prose"><Content /></div>
+      </div>
+      <Placeholder class="about-hero__image" src={d.image} alt={d.imageAlt} radius="l" ratio="4 / 5" eager />
+    </div>
+  </section>
+
+  <Section id="book" eyebrow={d.labels.clinicsEyebrow} title={d.labels.clinicsHeadline}>
+    <p slot="intro" class="body measure">{d.labels.clinicsText}</p>
+    <ClinicGrid lang={lang} />
+  </Section>
+</Base>
+
+<style>
+  .about-hero { padding-top: var(--space-9); }
+  .about-hero__grid { display: grid; gap: var(--space-7); grid-template-columns: 7fr 5fr; align-items: start; }
+  .about-hero__text { display: flex; flex-direction: column; align-items: flex-start; }
+  .about-hero__title { margin-top: var(--space-3); }
+  .about-hero__credentials { margin-top: var(--space-4); max-width: 30ch; }
+  .about-hero__prose { margin-top: var(--space-6); }
+  .about-hero__image { position: sticky; top: var(--space-5); }
+  @media (max-width: 899px) {
+    .about-hero__grid { grid-template-columns: 1fr; }
+    .about-hero__image { position: static; grid-row: 1; max-width: 420px; aspect-ratio: 4 / 3 !important; }
+  }
+  @media (max-width: 699px) {
+    .about-hero { padding-top: var(--space-7); }
+  }
+</style>

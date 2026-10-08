@@ -1,0 +1,227 @@
+---
+// The landing page, shared by / (da) and /en/ (en). All copy comes from src/content/*/<lang>/.
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Section from '../components/Section.astro';
+import ClinicGrid from '../components/ClinicGrid.astro';
+import PriceList from '../components/PriceList.astro';
+import Placeholder from '../components/Placeholder.astro';
+import LinkedText from '../components/LinkedText.astro';
+import Icon from '../components/Icon.astro';
+import { anne, clinics, brondbyPrices, EASYME_URL } from '../data/site';
+import { getPage, getSection, getTreatments } from '../lib/content';
+import { routes, t, type Lang } from '../i18n/utils';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t(lang);
+
+const page = await getPage(lang, 'home');
+const [hero, clinicsSec, treatmentsSec, pricesSec, aboutSec, contactSec] = await Promise.all(
+  ['hero', 'clinics', 'treatments', 'prices', 'about', 'contact'].map((n) => getSection(lang, n)),
+);
+const treatments = await getTreatments(lang);
+
+const { Content: HeroLead } = await render(hero);
+const { Content: ClinicsText } = await render(clinicsSec);
+const { Content: TreatmentsText } = await render(treatmentsSec);
+const { Content: AboutText } = await render(aboutSec);
+const { Content: ContactText } = await render(contactSec);
+const treatmentBodies = await Promise.all(treatments.map(async (e) => ({ data: e.data, Content: (await render(e)).Content })));
+
+const tl = treatmentsSec.data.labels;
+const pl = pricesSec.data.labels;
+const cl = contactSec.data.labels;
+const priceRows = (pricesSec.data.rows ?? []).map((r) => {
+  const price = brondbyPrices[r.id];
+  if (!price) throw new Error(`No price for "${r.id}" in src/data/site.ts`);
+  return { service: r.service, duration: r.duration, price };
+});
+
+const bookingLinks = {
+  online: { label: tl.online, href: EASYME_URL, external: true },
+  phone: { label: tl.phone, href: clinics.nykobing.phoneHref },
+};
+
+const home = new URL(routes.home[lang], Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: anne.name,
+  jobTitle: lang === 'da' ? 'Osteopat og fysioterapeut' : 'Osteopath and physiotherapist',
+  url: home,
+  email: `mailto:${anne.email}`,
+  telephone: '+4536208998',
+  sameAs: [anne.facebook],
+  knowsLanguage: ['da', 'en'],
+  worksFor: Object.values(clinics).map((c) => ({
+    '@type': 'MedicalBusiness',
+    name: c.name,
+    url: c.website,
+    telephone: c.phoneHref.replace('tel:', ''),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: c.street,
+      postalCode: c.postalCode,
+      addressLocality: c.town,
+      addressCountry: 'DK',
+    },
+  })),
+};
+---
+
+<Base title={page.data.title} description={page.data.description} lang={lang} paths={routes.home} page="home" jsonLd={jsonLd}>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__text">
+        <Eyebrow as="p">{hero.data.eyebrow}</Eyebrow>
+        <h1 class="display-xl hero__title">{hero.data.headline}</h1>
+        <div class="lead hero__lead measure"><HeroLead /></div>
+        <div class="actions hero__actions">
+          <Button variant="accent" href={EASYME_URL} external icon="arrow" lang={lang}>{hero.data.labels.bookOnline}</Button>
+          <Button variant="primary" href={clinics.nykobing.phoneHref} icon="phone" lang={lang}>{hero.data.labels.callPhone}</Button>
+        </div>
+      </div>
+      <Placeholder class="hero__image" src={hero.data.image} alt={hero.data.imageAlt} radius="l" ratio="4 / 5" eager />
+    </div>
+  </section>
+
+  <Section id="book" eyebrow={clinicsSec.data.eyebrow} title={clinicsSec.data.headline}>
+    <div slot="intro" class="body measure"><ClinicsText /></div>
+    <ClinicGrid lang={lang} />
+  </Section>
+
+  <Section id="behandlinger" eyebrow={treatmentsSec.data.eyebrow} title={treatmentsSec.data.headline}>
+    <div slot="intro" class="lead measure"><TreatmentsText /></div>
+    <p class="heading treatments__intro">{tl.listIntro}</p>
+    <div class="treatments">
+      {treatmentBodies.map(({ data, Content }) => (
+        <article class={`panel panel--${data.tone} treatment`}>
+          <h3 class="display-m treatment__title">{data.title}</h3>
+          <div class="body treatment__list"><Content /></div>
+        </article>
+      ))}
+    </div>
+    <p class="body treatments__reminder"><LinkedText text={tl.reminder} links={bookingLinks} lang={lang} /></p>
+  </Section>
+
+  <Section id="priser" eyebrow={pricesSec.data.eyebrow} title={pricesSec.data.headline}>
+    <div class="prices">
+      <div class="prices__brondby">
+        <PriceList title={pl.brondbyTitle} rows={priceRows} note={pl.note} />
+        <a class="text-link prices__book" href={EASYME_URL} target="_blank" rel="noopener">{pl.brondbyBook}<span class="ho-visually-hidden"> {s.newTab}</span><Icon name="arrow" /></a>
+      </div>
+      <div class="panel panel--sand prices__nykobing">
+        <h3 class="heading">{pl.nykobingTitle}</h3>
+        <p class="body">
+          <LinkedText text={pl.nykobingText} links={{ site: { label: clinics.nykobing.websiteLabel, href: clinics.nykobing.contactUrl ?? clinics.nykobing.website, external: true } }} lang={lang} />
+        </p>
+        <div class="actions">
+          <Button variant="primary" href={clinics.nykobing.phoneHref} icon="phone" lang={lang}>{pl.nykobingCall}</Button>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <section class="section" id="om-anne" aria-labelledby="om-anne-title">
+    <div class="container about">
+      <Placeholder class="about__image" src={aboutSec.data.image} alt={aboutSec.data.imageAlt} tone="sand" ratio="1 / 1" />
+      <div class="about__text">
+        <Eyebrow as="p">{aboutSec.data.eyebrow}</Eyebrow>
+        <h2 id="om-anne-title" class="display-l">{aboutSec.data.headline}</h2>
+        <p class="heading about__credentials">{aboutSec.data.labels.credentials}</p>
+        <div class="body measure"><AboutText /></div>
+        <div class="actions">
+          <Button variant="outline" href={routes.about[lang]} icon="arrow" lang={lang}>{aboutSec.data.labels.cta}</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="kontakt" aria-labelledby="kontakt-title">
+    <div class="container">
+      <div class="panel panel--tang on-tang contact">
+        <div class="contact__main">
+          <img class="contact__logo" src="/logos/lockup-horizontal-reversed.svg" alt="Hertzum Osteopati"width="281" height="32" />
+          <Eyebrow as="p" on="tang">{contactSec.data.eyebrow}</Eyebrow>
+          <h2 id="kontakt-title" class="display-l">{contactSec.data.headline}</h2>
+          <div class="body measure contact__text"><ContactText /></div>
+          <dl class="contact__details">
+            <div><dt>{cl.mobile}</dt><dd><a href={anne.mobileHref} class="tabular">{anne.mobile}</a></dd></div>
+            <div><dt>{cl.email}</dt><dd><a href={`mailto:${anne.email}`}>{anne.email}</a></dd></div>
+          </dl>
+          <p class="meta-text"><a href={anne.facebook} target="_blank" rel="noopener">{cl.facebook}<span class="ho-visually-hidden"> {s.newTab}</span></a></p>
+        </div>
+        <div class="contact__clinics">
+          <p class="heading">{cl.clinicsTitle}</p>
+          {Object.values(clinics).map((c) => (
+            <address class="meta-text contact__address">
+              <strong>{c.name}</strong><br />{c.street}<br />{c.postalCode} {c.town}<br />
+              <a href={c.phoneHref} class="tabular">{c.phone}</a>
+            </address>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-top: var(--space-9); padding-bottom: calc(var(--space-9) / 2); }
+  .hero__grid { display: grid; gap: var(--space-7); grid-template-columns: 7fr 5fr; align-items: center; }
+  .hero__text { display: flex; flex-direction: column; align-items: flex-start; }
+  .hero__title { margin-top: var(--space-3); max-width: 14ch; }
+  .hero__lead { margin-top: var(--space-5); }
+  .hero__actions { margin-top: var(--space-6); }
+
+  .treatments__intro { margin-bottom: var(--space-4); }
+  .treatments { display: grid; gap: var(--space-5); grid-template-columns: repeat(3, 1fr); }
+  .treatment { display: flex; flex-direction: column; gap: var(--space-4); }
+  .treatment__list :global(ul) { margin: 0; padding-left: 1.1em; }
+  .treatment__list :global(li + li) { margin-top: var(--space-1); }
+  .treatments__reminder { margin-top: var(--space-6); }
+  .treatments__reminder :global(a) { color: var(--rav-deep); }
+
+  .prices { display: grid; gap: var(--space-5); grid-template-columns: 7fr 5fr; align-items: start; }
+  .prices__book { margin-top: var(--space-4); }
+  .prices__nykobing { display: flex; flex-direction: column; gap: var(--space-4); align-items: flex-start; }
+  .prices__nykobing p :global(a) { color: var(--rav-deep); }
+
+  .about { display: grid; gap: var(--space-7); grid-template-columns: 5fr 7fr; align-items: center; }
+  .about__text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .about__text :global(.ho-eyebrow) { margin-bottom: calc(var(--space-2) - var(--space-4)); }
+
+  .contact { display: grid; gap: var(--space-7); grid-template-columns: 7fr 5fr; }
+  .contact__main { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .contact__logo { height: 32px; width: auto; margin-bottom: var(--space-4); }
+  .contact a { color: var(--on-tang); }
+  .contact__text { color: var(--on-tang); }
+  .contact__details { display: grid; gap: var(--space-3); margin-top: var(--space-2); }
+  .contact__details dt {
+    font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    font-variation-settings: "opsz" 12; color: var(--on-tang-muted);
+  }
+  .contact__details dd {
+    font-family: var(--font-display); font-size: 22px; line-height: 1.3; font-weight: 500; font-variation-settings: "opsz" 24;
+    user-select: text; overflow-wrap: anywhere;
+  }
+  .contact__clinics { display: flex; flex-direction: column; gap: var(--space-4); align-self: end; }
+  .contact__address { font-style: normal; color: var(--on-tang-muted); }
+  .contact__address strong { color: var(--on-tang); font-weight: 600; }
+
+  @media (max-width: 1023px) {
+    .treatments { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 899px) {
+    .hero__grid, .prices, .about, .contact { grid-template-columns: 1fr; }
+    .hero__image { aspect-ratio: 4 / 3 !important; }
+    .about__image { max-width: 360px; }
+  }
+  @media (max-width: 699px) {
+    .hero { padding-top: var(--space-7); }
+    .contact__details dd { font-size: 18px; }
+    .treatments { grid-template-columns: 1fr; }
+  }
+</style>
