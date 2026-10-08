@@ -1,8 +1,8 @@
 ---
 eyebrow: Osteopati · Brøndby og Nykøbing Sjælland
 headline: Rolige hænder til små og store kroppe
-image:
-imageAlt: Anne Hertzum behandler en baby
+image: /images/anne-hertzum.jpg
+imageAlt: Portræt af Anne Hertzum
 labels:
   bookOnline: Book tid i Brøndby
   callPhone: Ring til Nykøbing Sj.

@@ -4,7 +4,7 @@ description: Anne Hertzum er autoriseret osteopat (MSc, M.D.O.) og fysioterapeut
 eyebrow: Om Anne
 headline: Anne Hertzum
 lead: Autoriseret osteopat (MSc, M.D.O.) og autoriseret fysioterapeut (BSc)
-image:
+image: /images/anne-hertzum.jpg
 imageAlt: Portræt af Anne Hertzum
 labels:
   clinicsEyebrow: Book tid

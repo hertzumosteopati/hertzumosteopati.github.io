@@ -84,7 +84,7 @@ const jsonLd = {
           <Button variant="primary" href={clinics.nykobing.phoneHref} icon="phone" lang={lang}>{hero.data.labels.callPhone}</Button>
         </div>
       </div>
-      <Placeholder class="hero__image" src={hero.data.image} alt={hero.data.imageAlt} radius="l" ratio="4 / 5" eager />
+      <Placeholder class="hero__image" src={hero.data.image} alt={hero.data.imageAlt} radius="l" ratio="1 / 1" eager />
     </div>
   </section>
 
@@ -126,8 +126,8 @@ const jsonLd = {
   </Section>
 
   <section class="section" id="om-anne" aria-labelledby="om-anne-title">
-    <div class="container about">
-      <Placeholder class="about__image" src={aboutSec.data.image} alt={aboutSec.data.imageAlt} tone="sand" ratio="1 / 1" />
+    <div class={`container about${aboutSec.data.image ? '' : ' about--text'}`}>
+      {aboutSec.data.image && <Placeholder class="about__image" src={aboutSec.data.image} alt={aboutSec.data.imageAlt} ratio="1 / 1" />}
       <div class="about__text">
         <Eyebrow as="p">{aboutSec.data.eyebrow}</Eyebrow>
         <h2 id="om-anne-title" class="display-l">{aboutSec.data.headline}</h2>
@@ -171,6 +171,8 @@ const jsonLd = {
 <style>
   .hero { padding-top: var(--space-9); padding-bottom: calc(var(--space-9) / 2); }
   .hero__grid { display: grid; gap: var(--space-7); grid-template-columns: 7fr 5fr; align-items: center; }
+  /* The portrait is 300px; keep it near its native size so it stays sharp */
+  .hero__grid > :global(.hero__image) { max-width: 300px; justify-self: end; }
   .hero__text { display: flex; flex-direction: column; align-items: flex-start; }
   .hero__title { margin-top: var(--space-3); max-width: 14ch; }
   .hero__lead { margin-top: var(--space-5); }
@@ -190,6 +192,7 @@ const jsonLd = {
   .prices__nykobing p :global(a) { color: var(--rav-deep); }
 
   .about { display: grid; gap: var(--space-7); grid-template-columns: 5fr 7fr; align-items: center; }
+  .about--text { grid-template-columns: 1fr; }
   .about__text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
   .about__text :global(.ho-eyebrow) { margin-bottom: calc(var(--space-2) - var(--space-4)); }
 
@@ -216,8 +219,8 @@ const jsonLd = {
   }
   @media (max-width: 899px) {
     .hero__grid, .prices, .about, .contact { grid-template-columns: 1fr; }
-    .hero__image { aspect-ratio: 4 / 3 !important; }
-    .about__image { max-width: 360px; }
+    .hero__grid > :global(.hero__image) { max-width: 240px; justify-self: start; }
+    .about :global(.about__image) { max-width: 240px; }
   }
   @media (max-width: 699px) {
     .hero { padding-top: var(--space-7); }

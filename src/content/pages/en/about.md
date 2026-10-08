@@ -4,7 +4,7 @@ description: Anne Hertzum is an authorised osteopath (MSc, M.D.O.) and physiothe
 eyebrow: About Anne
 headline: Anne Hertzum
 lead: Authorised osteopath (MSc, M.D.O.) and authorised physiotherapist (BSc)
-image:
+image: /images/anne-hertzum.jpg
 imageAlt: Portrait of Anne Hertzum
 labels:
   clinicsEyebrow: Book an appointment

@@ -25,7 +25,7 @@ const d = page.data;
         <p class="heading about-hero__credentials">{d.lead}</p>
         <div class="body prose about-hero__prose"><Content /></div>
       </div>
-      <Placeholder class="about-hero__image" src={d.image} alt={d.imageAlt} radius="l" ratio="4 / 5" eager />
+      <Placeholder class="about-hero__image" src={d.image} alt={d.imageAlt} radius="l" ratio="1 / 1" eager />
     </div>
   </section>
 
@@ -42,10 +42,10 @@ const d = page.data;
   .about-hero__title { margin-top: var(--space-3); }
   .about-hero__credentials { margin-top: var(--space-4); max-width: 30ch; }
   .about-hero__prose { margin-top: var(--space-6); }
-  .about-hero__image { position: sticky; top: var(--space-5); }
+  .about-hero__grid > :global(.about-hero__image) { max-width: 300px; justify-self: end; position: sticky; top: var(--space-5); }
   @media (max-width: 899px) {
     .about-hero__grid { grid-template-columns: 1fr; }
-    .about-hero__image { position: static; grid-row: 1; max-width: 420px; aspect-ratio: 4 / 3 !important; }
+    .about-hero__grid > :global(.about-hero__image) { position: static; grid-row: 1; max-width: 240px; justify-self: start; }
   }
   @media (max-width: 699px) {
     .about-hero { padding-top: var(--space-7); }

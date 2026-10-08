@@ -1,8 +1,8 @@
 ---
 eyebrow: Osteopathy · Brøndby and Nykøbing Sjælland
 headline: Calm hands for bodies big and small
-image:
-imageAlt: Anne Hertzum treating a baby
+image: /images/anne-hertzum.jpg
+imageAlt: Portrait of Anne Hertzum
 labels:
   bookOnline: Book in Brøndby
   callPhone: Call Nykøbing Sj.
