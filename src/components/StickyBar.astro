@@ -1,0 +1,28 @@
+---
+// Fixed bottom booking bar, phones only (below 700px). No JavaScript.
+import Button from './Button.astro';
+import { clinics } from '../data/site';
+import { t, type Lang } from '../i18n/utils';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t(lang);
+---
+
+<nav class="sticky-bar" aria-label={s.stickyLabel}>
+  <Button href={clinics.brondby.booking.href} external variant="accent" size="sm" lang={lang}>{s.stickyOnline}</Button>
+  <Button href={clinics.nykobing.booking.href} variant="primary" size="sm" icon="phone" lang={lang}>{s.stickyPhone}</Button>
+</nav>
+
+<style>
+  .sticky-bar { display: none; }
+  @media (max-width: 699px) {
+    .sticky-bar {
+      display: flex; gap: var(--space-3);
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+      padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+      background: var(--kalk);
+      box-shadow: var(--shadow-lift);
+    }
+    .sticky-bar :global(.ho-btn) { flex: 1 1 0; min-width: 0; }
+  }
+</style>

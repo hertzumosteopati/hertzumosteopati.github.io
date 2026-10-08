@@ -1,0 +1,12 @@
+---
+// Uppercase Bricolage label with the rav touchpoint dot, set above a headline or card title.
+interface Props {
+  on?: 'kalk' | 'tang';
+  as?: 'span' | 'p' | 'div' | 'h2' | 'h3';
+  class?: string;
+}
+const { on = 'kalk', as: Tag = 'span', class: className } = Astro.props;
+const classes = ['ho-eyebrow', on === 'tang' && 'ho-eyebrow--on-tang', className].filter(Boolean).join(' ');
+---
+
+<Tag class={classes}><span class="ho-eyebrow__dot" aria-hidden="true"></span><slot /></Tag>

@@ -1,0 +1,38 @@
+---
+// The two ClinicCards side by side: copy from src/content/clinics/<lang>/, facts from src/data/site.ts.
+import ClinicCard, { type ClinicFact } from './ClinicCard.astro';
+import { clinics } from '../data/site';
+import { getClinicText } from '../lib/content';
+import { t, type Lang } from '../i18n/utils';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t(lang);
+const texts = await getClinicText(lang);
+const cards = texts.map(({ data }) => {
+  const c = clinics[data.clinic];
+  const facts: ClinicFact[] = [
+    { icon: 'phone', label: s.phone, value: c.phone, href: c.phoneHref },
+    { icon: 'mail', label: s.email, value: c.email, href: `mailto:${c.email}` },
+    { icon: 'external', label: s.website, value: c.websiteLabel, href: c.website, external: true },
+  ];
+  return { data, c, facts };
+});
+---
+
+<div class="grid-2">
+  {cards.map(({ data, c, facts }) => (
+    <ClinicCard
+      role={data.role}
+      name={c.name}
+      intro={data.intro}
+      address={c.address}
+      days={data.days}
+      booking={{ kind: c.booking.kind, label: data.bookingLabel, href: c.booking.href }}
+      secondary={{ label: data.mapsLabel, href: c.maps }}
+      note={data.note}
+      tone={c.tone}
+      facts={facts}
+      lang={lang}
+    />
+  ))}
+</div>

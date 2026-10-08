@@ -1,0 +1,140 @@
+/* Hertzum Osteopati: page-level base styles. Every value comes from tokens.css. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--space-5); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--kalk);
+  color: var(--tang);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.6;
+  font-variation-settings: "opsz" 17;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, ul, ol, dl, dd, figure { margin: 0; }
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.on-tang :focus-visible { outline-color: var(--rav); }
+
+.display-xl, .display-l, .display-m, .heading { text-wrap: balance; }
+
+@media (max-width: 699px) {
+  .display-xl { font-size: 44px; }
+  .display-l { font-size: 32px; }
+}
+
+.measure { max-width: 65ch; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Skip link */
+.skip-link {
+  position: absolute; left: var(--space-4); top: var(--space-4); z-index: 20;
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+  background: var(--tang); color: var(--on-tang);
+  font-family: var(--font-display); font-size: 14px; font-weight: 600; text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+
+/* Container: content max 1120px, 64px side margin on desktop, 16px on phones */
+.container {
+  max-width: calc(1120px + 2 * var(--space-8));
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+}
+@media (max-width: 1023px) { .container { padding-inline: var(--space-5); } }
+@media (max-width: 699px) { .container { padding-inline: var(--space-4); } }
+
+/* Sections sit space-9 apart on desktop, space-7 on phones */
+.section { padding-block: calc(var(--space-9) / 2); }
+@media (max-width: 699px) { .section { padding-block: calc(var(--space-7) / 2); } }
+
+.section__head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-6); }
+.section__head .display-l, .section__head .display-xl { max-width: 22ch; }
+.section__head > :is(.lead, .body, .prose) { margin-top: var(--space-2); }
+
+/* Running text from markdown */
+.prose { max-width: 65ch; }
+.prose > * + * { margin-top: var(--space-4); }
+.prose h2 {
+  margin-top: var(--space-6);
+  font-family: var(--font-display); font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 24; text-wrap: balance;
+}
+.prose ul { padding-left: 1.2em; }
+.prose li + li { margin-top: var(--space-1); }
+.prose a { color: var(--rav-deep); }
+.lead p + p, .body p + p { margin-top: var(--space-3); }
+
+/* Meta text: addresses, phone numbers, nav links */
+.meta-text { font-family: var(--font-display); font-size: 14px; line-height: 1.45; font-weight: 500; font-variation-settings: "opsz" 14; font-variant-numeric: tabular-nums; }
+
+/* Text link with a trailing arrow */
+.text-link {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-display); font-size: 15px; font-weight: 600; font-variation-settings: "opsz" 14;
+  color: var(--tang);
+}
+
+/* Actions row */
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+/* Buttons are full width on phones below 480px, except the small ones */
+@media (max-width: 479px) {
+  .actions .ho-btn:not(.ho-btn--sm), .ho-clinic__actions .ho-btn { width: 100%; }
+}
+
+/* Cards: space-5 padding on phones */
+@media (max-width: 699px) {
+  .ho-clinic, .ho-prices { padding: var(--space-5); }
+}
+.ho-clinic__fact a { color: var(--tang); }
+
+/* Card grids */
+.grid-2 { display: grid; gap: var(--space-5); grid-template-columns: 1fr; }
+@media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+/* Tinted panels */
+.panel { border-radius: var(--radius-m); padding: var(--space-6); }
+.panel--sand { background: var(--sand); }
+.panel--siv { background: var(--siv); }
+.panel--bone { background: var(--bone); border: var(--border-hair) solid var(--line); }
+.panel--tang { background: var(--tang); color: var(--on-tang); border-radius: var(--radius-l); padding: var(--space-8); }
+@media (max-width: 699px) {
+  .panel { padding: var(--space-5); }
+  .panel--tang { padding: var(--space-6) var(--space-5); }
+}
+
+/* Image placeholder: a siv or sand panel with the mark centred at 48px */
+.placeholder {
+  display: grid; place-items: center; width: 100%;
+  background: var(--siv); border-radius: var(--radius-m);
+}
+.placeholder--sand { background: var(--sand); }
+.placeholder--l { border-radius: var(--radius-l); }
+.placeholder img { width: 48px; height: 48px; }
+.photo { display: block; width: 100%; height: auto; object-fit: cover; border-radius: var(--radius-m); }
+.photo--l { border-radius: var(--radius-l); }
+
+/* Room for the sticky booking bar on phones */
+@media (max-width: 699px) {
+  body { padding-bottom: calc(44px + 2 * var(--space-3) + env(safe-area-inset-bottom, 0px)); }
+}

@@ -1,0 +1,69 @@
+---
+import Button from './Button.astro';
+import { routes, t, other, type Lang, type RouteKey } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Which page this is, for aria-current and the language switch. */
+  page?: RouteKey;
+  /** Path of the same page in the other language. */
+  alternate: string;
+}
+const { lang, page, alternate } = Astro.props;
+const s = t(lang);
+const home = routes.home[lang];
+const nav = [
+  { href: `${home}#behandlinger`, label: s.nav.treatments },
+  { href: `${home}#priser`, label: s.nav.prices },
+  { href: routes.about[lang], label: s.nav.about, current: page === 'about' },
+  { href: `${home}#kontakt`, label: s.nav.contact },
+];
+const otherLang = other(lang);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href={home} class="site-header__logo" aria-label={s.homeLabel}>
+      <img src="/logos/lockup-horizontal.svg" alt="" width="281" height="32" />
+    </a>
+    <nav class="site-header__nav" aria-label={s.navLabel}>
+      <ul class="site-header__links">
+        {nav.map((item) => (
+          <li><a href={item.href} class="site-header__link" aria-current={item.current ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+        <li><a href={alternate} class="site-header__link site-header__lang" lang={otherLang} hreflang={otherLang} title={s.switchTitle}>{s.switchLabel}</a></li>
+      </ul>
+      <Button href={`${home}#book`} size="sm" class="site-header__book" lang={lang}>{s.bookCta}</Button>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { border-bottom: var(--border-hair) solid var(--line); }
+  .site-header__inner {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4) var(--space-6);
+    min-height: 80px; padding-block: var(--space-3);
+  }
+  .site-header__logo { display: block; flex: none; }
+  .site-header__logo img { height: 32px; width: auto; }
+  .site-header__nav { display: flex; align-items: center; gap: var(--space-5); }
+  .site-header__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-5); list-style: none; margin: 0; padding: 0; }
+  .site-header__link {
+    display: inline-block; padding-block: var(--space-2);
+    font-family: var(--font-display); font-size: 15px; line-height: 1.45; font-weight: 500; font-variation-settings: "opsz" 14;
+    color: var(--tang); text-decoration: none;
+  }
+  .site-header__link:hover { text-decoration: underline; }
+  .site-header__link[aria-current='page'] { color: var(--rav-deep); text-decoration: underline; }
+  .site-header__lang { color: var(--tang-muted); }
+  @media (max-width: 1023px) {
+    .site-header__inner { flex-wrap: wrap; }
+  }
+  @media (max-width: 699px) {
+    .site-header__inner { flex-direction: column; align-items: flex-start; padding-block: var(--space-4); gap: var(--space-2); }
+    .site-header__links { gap: 0 var(--space-3); }
+    .site-header__link { font-size: 14px; }
+    /* The sticky booking bar takes over on phones */
+    .site-header__nav :global(.site-header__book) { display: none; }
+  }
+</style>

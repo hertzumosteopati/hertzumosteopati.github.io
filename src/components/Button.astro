@@ -1,0 +1,43 @@
+---
+// Pill-shaped call to action, ported from design-system/components (Button).
+// Primary (tang) is the default; accent (rav) once per view, for the online booking in Brøndby.
+import Icon from './Icon.astro';
+import { getLang, t, type Lang } from '../i18n/utils';
+
+interface Props {
+  variant?: 'primary' | 'accent' | 'outline';
+  size?: 'md' | 'sm';
+  href?: string;
+  /** Opens in a new tab with rel="noopener" (booking systems, maps). */
+  external?: boolean;
+  icon?: 'arrow' | 'phone';
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  lang?: Lang;
+  class?: string;
+}
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  external = false,
+  icon,
+  disabled = false,
+  type = 'button',
+  class: className,
+} = Astro.props;
+const lang = Astro.props.lang ?? getLang(Astro.currentLocale);
+const classes = ['ho-btn', `ho-btn--${variant}`, size === 'sm' && 'ho-btn--sm', className].filter(Boolean).join(' ');
+---
+
+{href ? (
+  <a
+    class={classes}
+    href={href}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener' : undefined}
+    aria-disabled={disabled ? 'true' : undefined}
+  ><slot />{external && <span class="ho-visually-hidden"> {t(lang).newTab}</span>}{icon && <span class="ho-btn__icon"><Icon name={icon} size={20} /></span>}</a>
+) : (
+  <button class={classes} type={type} disabled={disabled}><slot />{icon && <span class="ho-btn__icon"><Icon name={icon} size={20} /></span>}</button>
+)}

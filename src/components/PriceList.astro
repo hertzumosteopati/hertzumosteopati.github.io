@@ -1,0 +1,28 @@
+---
+// Bordered bone card listing services and prices, ported from design-system/components (PriceList).
+export interface PriceRow {
+  service: string;
+  duration?: string;
+  price: string;
+}
+interface Props {
+  title?: string;
+  rows: PriceRow[];
+  note?: string;
+  class?: string;
+}
+const { title, rows, note, class: className } = Astro.props;
+---
+
+<div class={['ho-prices', className].filter(Boolean).join(' ')}>
+  {title && <h3 class="ho-prices__title">{title}</h3>}
+  <ul class="ho-prices__list">
+    {rows.map((r) => (
+      <li class="ho-prices__row">
+        <span class="ho-prices__service">{r.service}{r.duration && <span class="ho-prices__duration"> · {r.duration}</span>}</span>
+        <span class="ho-prices__price">{r.price}</span>
+      </li>
+    ))}
+  </ul>
+  {note && <p class="ho-prices__note">{note}</p>}
+</div>

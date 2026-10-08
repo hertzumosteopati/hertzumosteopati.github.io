@@ -1,0 +1,27 @@
+---
+// A page section: optional eyebrow, display-l headline and content inside the container.
+import Eyebrow from './Eyebrow.astro';
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  titleTag?: 'h1' | 'h2';
+  titleClass?: string;
+  class?: string;
+}
+const { id, eyebrow, title, titleTag: Title = 'h2', titleClass = 'display-l', class: className } = Astro.props;
+const headingId = id && title ? `${id}-title` : undefined;
+---
+
+<section id={id} class={['section', className].filter(Boolean).join(' ')} aria-labelledby={headingId}>
+  <div class="container">
+    {(eyebrow || title || Astro.slots.has('intro')) && (
+      <div class="section__head">
+        {eyebrow && <Eyebrow as="p">{eyebrow}</Eyebrow>}
+        {title && <Title id={headingId} class={titleClass}>{title}</Title>}
+        <slot name="intro" />
+      </div>
+    )}
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,69 @@
+---
+// One tinted card per clinic, ported from design-system/components (ClinicCard).
+// Online booking renders an accent button; phone booking a primary button with a tel: link.
+import Button from './Button.astro';
+import Eyebrow from './Eyebrow.astro';
+import Icon from './Icon.astro';
+import { getLang, t, type Lang } from '../i18n/utils';
+
+export interface ClinicFact {
+  icon: 'phone' | 'mail' | 'external';
+  label: string;
+  value: string;
+  href?: string;
+  external?: boolean;
+}
+
+interface Props {
+  role: string;
+  name: string;
+  intro?: string;
+  address: string;
+  days?: string;
+  booking: { kind: 'online' | 'phone'; label: string; href: string };
+  secondary?: { label: string; href: string };
+  note?: string;
+  tone?: 'siv' | 'sand' | 'bone';
+  /** Extra fact rows after address and days: clinic phone, email, website. */
+  facts?: ClinicFact[];
+  lang?: Lang;
+  class?: string;
+}
+const { role, name, intro, address, days, booking, secondary, note, tone = 'siv', facts = [], class: className } = Astro.props;
+const lang = Astro.props.lang ?? getLang(Astro.currentLocale);
+const s = t(lang);
+const isPhone = booking.kind === 'phone';
+---
+
+<article class={['ho-clinic', `ho-clinic--${tone}`, className].filter(Boolean).join(' ')}>
+  <Eyebrow>{role}</Eyebrow>
+  <h3 class="ho-clinic__name">{name}</h3>
+  {intro && <p class="ho-clinic__intro">{intro}</p>}
+  <dl class="ho-clinic__facts">
+    <div class="ho-clinic__fact">
+      <dt><Icon name="pin" /><span class="ho-visually-hidden">{s.address}</span></dt>
+      <dd>{address}</dd>
+    </div>
+    {days && (
+      <div class="ho-clinic__fact">
+        <dt><Icon name="clock" /><span class="ho-visually-hidden">{s.days}</span></dt>
+        <dd>{days}</dd>
+      </div>
+    )}
+    {facts.map((f) => (
+      <div class="ho-clinic__fact">
+        <dt><Icon name={f.icon} /><span class="ho-visually-hidden">{f.label}</span></dt>
+        <dd>
+          {f.href ? (
+            <a href={f.href} target={f.external ? '_blank' : undefined} rel={f.external ? 'noopener' : undefined}>{f.value}{f.external && <span class="ho-visually-hidden"> {s.newTab}</span>}</a>
+          ) : f.value}
+        </dd>
+      </div>
+    ))}
+  </dl>
+  <div class="ho-clinic__actions">
+    <Button variant={isPhone ? 'primary' : 'accent'} href={booking.href} external={!isPhone} icon={isPhone ? 'phone' : 'arrow'} lang={lang}>{booking.label}</Button>
+    {secondary && <Button variant="outline" href={secondary.href} external lang={lang}>{secondary.label}</Button>}
+  </div>
+  {note && <p class="ho-clinic__note">{note}</p>}
+</article>

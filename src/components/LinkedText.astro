@@ -1,0 +1,27 @@
+---
+// Renders a sentence from markdown frontmatter with {key} slots replaced by links,
+// so copy stays in the content files while URLs stay in src/data/site.ts.
+import { getLang, t, type Lang } from '../i18n/utils';
+interface LinkDef {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+interface Props {
+  text: string;
+  links: Record<string, LinkDef>;
+  lang?: Lang;
+}
+const { text, links } = Astro.props;
+const lang = Astro.props.lang ?? getLang(Astro.currentLocale);
+const parts = text.split(/(\{\w+\})/).filter(Boolean);
+---
+
+{parts.map((part) => {
+  const m = part.match(/^\{(\w+)\}$/);
+  const link = m ? links[m[1]] : undefined;
+  if (!link) return part;
+  return (
+    <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener' : undefined}>{link.label}{link.external && <span class="ho-visually-hidden"> {t(lang).newTab}</span>}</a>
+  );
+})}

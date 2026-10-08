@@ -1,0 +1,63 @@
+---
+import '../styles/tokens.css';
+import '../styles/components.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyBar from '../components/StickyBar.astro';
+import { ogLocale, other, t, type Lang, type RouteKey } from '../i18n/utils';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** Path of this page in each language, for hreflang and the language switch. */
+  paths: Record<Lang, string>;
+  page?: RouteKey;
+  jsonLd?: object;
+  noindex?: boolean;
+}
+const { title, description, lang, paths, page, jsonLd, noindex = false } = Astro.props;
+const canonical = new URL(paths[lang], Astro.site);
+const alt = other(lang);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {!noindex && (
+      <>
+        <link rel="alternate" hreflang="da" href={new URL(paths.da, Astro.site)} />
+        <link rel="alternate" hreflang="en" href={new URL(paths.en, Astro.site)} />
+        <link rel="alternate" hreflang="x-default" href={new URL(paths.da, Astro.site)} />
+      </>
+    )}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/BricolageGrotesque-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/SourceSerif4-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    <meta property="og:locale:alternate" content={ogLocale[alt]} />
+    <meta name="generator" content={Astro.generator} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#indhold">{t(lang).skip}</a>
+    <Header lang={lang} page={page} alternate={paths[alt]} />
+    <main id="indhold">
+      <slot />
+    </main>
+    <Footer lang={lang} alternate={paths[alt]} />
+    <StickyBar lang={lang} />
+  </body>
+</html>
