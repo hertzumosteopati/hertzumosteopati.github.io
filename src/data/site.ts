@@ -11,7 +11,7 @@ export const anne = {
   name: 'Anne Hertzum',
   mobile: '36 20 89 98',
   mobileHref: 'tel:+4536208998',
-  email: 'hertzumosteopati@gmail.com',
+  email: 'info@hertzumosteopati.dk',
   facebook: 'https://www.facebook.com/people/Hertzum-Osteopati/61556889272882/',
 };
 
@@ -46,7 +46,7 @@ export const clinics: Record<ClinicKey, Clinic> = {
     address: 'Vestre Gade 6D, st. th. · 2605 Brøndby',
     phone: '93 97 00 79',
     phoneHref: 'tel:+4593970079',
-    email: 'hertzumosteopati@gmail.com',
+    email: 'info@hertzumosteopati.dk',
     website: 'https://manuelklinik.dk/',
     websiteLabel: 'manuelklinik.dk',
     maps: 'https://maps.app.goo.gl/bbCUzzQKeV9y3xGdA',
