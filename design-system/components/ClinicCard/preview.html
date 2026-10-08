@@ -1,0 +1,33 @@
+<!-- @dsCard group="Landing page" height=420 subtitle="Brøndby (siv, online booking) and Nykøbing Sjælland (sand, phone)" -->
+<div id="root" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; background: var(--kalk)"></div>
+<script>
+(function () {
+  var h = React.createElement, HO = window.HertzumOsteopati;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(React.Fragment, null,
+      h(HO.ClinicCard, {
+        tone: 'siv',
+        role: 'Egen klinik · 2 dage om ugen',
+        name: 'Brøndby Manuel Klinik',
+        intro: 'Her behandler Anne babyer, børn og voksne i sin egen klinik. Du booker selv din tid online.',
+        address: 'Vestre Gade 6D, st. th. · 2605 Brøndby',
+        days: 'Dage efter aftale',
+        booking: { kind: 'online', label: 'Book tid i Brøndby', href: 'https://ezme.io/c/X6l/oaqf' },
+        secondary: { label: 'Find vej', href: 'https://maps.app.goo.gl/bbCUzzQKeV9y3xGdA' },
+        note: 'Klinikken er ofte i behandling og tager ikke altid telefonen. Læg en besked, send en sms eller skriv til hertzumosteopati@gmail.com.'
+      }),
+      h(HO.ClinicCard, {
+        tone: 'sand',
+        role: 'Ansat · 3 dage om ugen',
+        name: 'Manuel Medicinsk Klinik',
+        intro: 'I Odsherred arbejder Anne hos Michael Cohrt med manuel terapi og osteopati for børn og voksne.',
+        address: 'Oddenvej 78 · 4500 Nykøbing Sjælland',
+        days: 'Dage efter aftale',
+        booking: { kind: 'phone', label: 'Ring 59 31 10 05', href: 'tel:+4559311005' },
+        secondary: { label: 'manuelmedicinsklinik.dk', href: 'https://manuelmedicinsklinik.dk/' },
+        note: 'Tider bookes ved at ringe til klinikken, så du får den rigtige behandler. Telefonen er åben man., tirs., tors. og fre. kl. 9–11.'
+      })
+    )
+  );
+})();
+</script>

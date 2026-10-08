@@ -1,0 +1,16 @@
+<!-- @dsCard group="Actions" height=150 subtitle="Primary, accent, outline; md and sm" -->
+<div id="root" style="padding: 24px; background: var(--kalk); display: flex; flex-wrap: wrap; gap: 12px; align-items: center"></div>
+<script>
+(function () {
+  var h = React.createElement, HO = window.HertzumOsteopati;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(React.Fragment, null,
+      h(HO.Button, { variant: 'accent', href: '#', icon: 'arrow' }, 'Book tid i Brøndby'),
+      h(HO.Button, { variant: 'primary', href: '#', icon: 'phone' }, 'Ring 59 31 10 05'),
+      h(HO.Button, { variant: 'outline', href: '#' }, 'Se priser'),
+      h(HO.Button, { variant: 'primary', size: 'sm' }, 'Book tid'),
+      h(HO.Button, { variant: 'outline', size: 'sm', disabled: true }, 'Lukket i dag')
+    )
+  );
+})();
+</script>

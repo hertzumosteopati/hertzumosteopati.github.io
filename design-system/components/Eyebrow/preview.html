@@ -1,0 +1,17 @@
+<!-- @dsCard group="Text" height=150 subtitle="On kalk, on siv, on tang" -->
+<div id="root" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 24px; background: var(--kalk)"></div>
+<script>
+(function () {
+  var h = React.createElement, HO = window.HertzumOsteopati;
+  function panel(bg, children) {
+    return h('div', { style: { background: 'var(--' + bg + ')', padding: '24px', borderRadius: 'var(--radius-m)', display: 'flex', flexDirection: 'column', gap: '8px' } }, children);
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(React.Fragment, null,
+      panel('kalk', [h(HO.Eyebrow, { key: 'e' }, 'Babyer og børn'), h('p', { key: 'p', style: { margin: 0, fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 600, color: 'var(--tang)' } }, 'Kolik og tungebånd')]),
+      panel('siv', [h(HO.Eyebrow, { key: 'e' }, 'Egen klinik · Brøndby'), h('p', { key: 'p', style: { margin: 0, fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 600, color: 'var(--tang)' } }, 'Brøndby Manuel Klinik')]),
+      panel('tang', [h(HO.Eyebrow, { key: 'e', on: 'tang' }, 'Kontakt'), h('p', { key: 'p', style: { margin: 0, fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 600, color: 'var(--on-tang)' } }, 'Har du spørgsmål?')])
+    )
+  );
+})();
+</script>

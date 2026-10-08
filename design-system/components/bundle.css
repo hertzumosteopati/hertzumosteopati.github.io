@@ -1,0 +1,62 @@
+/* Hertzum Osteopati components — pills, soft tiles, tint and hairline. Load after tokens.css. */
+
+.ho-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Button */
+.ho-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  box-sizing: border-box; min-height: 52px; padding: 0 var(--space-5);
+  font-family: var(--font-display); font-size: 15px; font-weight: 600; letter-spacing: 0.01em; line-height: 1;
+  font-variation-settings: "opsz" 14;
+  border: var(--border-hair) solid transparent; border-radius: var(--radius-pill);
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+.ho-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.ho-btn__icon { display: inline-flex; }
+.ho-btn--primary { background: var(--tang); color: var(--on-tang); border-color: var(--tang); }
+.ho-btn--primary:hover { background: var(--tang-muted); border-color: var(--tang-muted); }
+.ho-btn--accent { background: var(--rav); color: var(--on-rav); border-color: var(--rav); }
+.ho-btn--accent:hover { border-color: var(--tang); }
+.ho-btn--outline { background: transparent; color: var(--tang); border-color: var(--tang); }
+.ho-btn--outline:hover { background: var(--bone); }
+.ho-btn--sm { min-height: 44px; padding: 0 var(--space-4); font-size: 14px; }
+.ho-btn[disabled], .ho-btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+
+/* Eyebrow */
+.ho-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--space-2); margin: 0;
+  font-family: var(--font-display); font-size: 12px; line-height: 1.3; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  font-variation-settings: "opsz" 12;
+  color: var(--tang-muted);
+}
+.ho-eyebrow__dot { width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--rav); flex: none; }
+.ho-eyebrow--on-tang { color: var(--on-tang-muted); }
+
+/* ClinicCard */
+.ho-clinic {
+  box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-4);
+  padding: var(--space-6); border-radius: var(--radius-m); color: var(--tang);
+}
+.ho-clinic--siv { background: var(--siv); }
+.ho-clinic--sand { background: var(--sand); }
+.ho-clinic--bone { background: var(--bone); border: var(--border-hair) solid var(--line); }
+.ho-clinic__name { margin: 0; font-family: var(--font-display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; font-variation-settings: "opsz" 48; text-wrap: balance; }
+.ho-clinic__intro { margin: 0; font-family: var(--font-serif); font-size: 17px; line-height: 1.6; max-width: 42ch; }
+.ho-clinic__facts { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
+.ho-clinic__fact { display: flex; gap: var(--space-2); align-items: flex-start; }
+.ho-clinic__fact dt { display: inline-flex; color: var(--tang-muted); margin-top: 2px; }
+.ho-clinic__fact dd { margin: 0; font-family: var(--font-display); font-size: 14px; line-height: 1.45; font-weight: 500; font-variation-settings: "opsz" 14; color: var(--tang-muted); font-variant-numeric: tabular-nums; }
+.ho-clinic__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
+.ho-clinic__note { margin: 0; font-family: var(--font-serif); font-size: 15px; line-height: 1.55; color: var(--tang-muted); }
+
+/* PriceList */
+.ho-prices { box-sizing: border-box; background: var(--bone); border: var(--border-hair) solid var(--line); border-radius: var(--radius-m); padding: var(--space-6); color: var(--tang); }
+.ho-prices__title { margin: 0 0 var(--space-4); font-family: var(--font-display); font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em; font-variation-settings: "opsz" 24; }
+.ho-prices__list { list-style: none; margin: 0; padding: 0; }
+.ho-prices__row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); padding: var(--space-3) 0; border-top: var(--border-hair) solid var(--line); }
+.ho-prices__row:first-child { border-top: 0; padding-top: 0; }
+.ho-prices__service { font-family: var(--font-serif); font-size: 17px; line-height: 1.5; }
+.ho-prices__duration { color: var(--tang-muted); white-space: nowrap; }
+.ho-prices__price { font-family: var(--font-display); font-size: 28px; line-height: 1; font-weight: 500; letter-spacing: -0.02em; font-variation-settings: "opsz" 48; font-variant-numeric: tabular-nums; color: var(--rav-deep); white-space: nowrap; }
+.ho-prices__note { margin: var(--space-4) 0 0; font-family: var(--font-serif); font-size: 15px; line-height: 1.55; color: var(--tang-muted); }

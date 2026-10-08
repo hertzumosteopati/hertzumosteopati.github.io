@@ -1,0 +1,21 @@
+<!-- @dsCard group="Landing page" height=360 subtitle="Brøndby prices as the clinic writes them" -->
+<div id="root" style="padding: 24px; background: var(--kalk); max-width: 560px"></div>
+<script>
+(function () {
+  var h = React.createElement, HO = window.HertzumOsteopati;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(HO.PriceList, {
+      title: 'Priser i Brøndby',
+      rows: [
+        { service: 'Osteopati, 1. behandling (voksen)', price: '750 kr.' },
+        { service: 'Osteopati, opfølgende (voksen)', price: '750 kr.' },
+        { service: 'Osteopati, 1. behandling (baby 0–1 år)', price: '650 kr.' },
+        { service: 'Osteopati, opfølgende (baby/barn)', price: '650 kr.' },
+        { service: 'Fysioterapi, 1. konsultation', price: '515 kr.' },
+        { service: 'Fysioterapi, opfølgende', duration: '40 min.', price: '515 kr.' }
+      ],
+      note: 'Alle tider er inkl. omklædning og journalføring.'
+    })
+  );
+})();
+</script>
