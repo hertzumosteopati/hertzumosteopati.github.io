@@ -1,5 +1,7 @@
 ---
 import Landing from '../views/Landing.astro';
+import ComingSoon from '../views/ComingSoon.astro';
+import { site } from '../data/site';
 ---
 
-<Landing lang="da" />
+{site.comingSoon ? <ComingSoon /> : <Landing lang="da" />}

@@ -1,0 +1,58 @@
+---
+// Temporary holding page, shown on every route while site.comingSoon is true.
+// Danish first, then English, like the 404. No header, footer or sticky bar.
+import '../styles/tokens.css';
+import '../styles/components.css';
+import '../styles/global.css';
+import Button from '../components/Button.astro';
+import { EASYME_URL, anne, site } from '../data/site';
+---
+
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.name} · Ny hjemmeside på vej</title>
+    <meta name="description" content="Vores nye hjemmeside er på vej. Book tid online eller ring til Anne Hertzum." />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/BricolageGrotesque-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/SourceSerif4-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <main class="soon">
+      <img class="soon__logo" src="/logos/lockup-horizontal.svg" alt={site.name} width="240" height="48" />
+      <div class="soon__block">
+        <h1 class="display-l">Ny hjemmeside på vej</h1>
+        <p class="lead measure">Vi arbejder på en ny hjemmeside. Indtil da kan du booke tid online eller ringe til Anne.</p>
+        <div class="actions">
+          <Button href={EASYME_URL} variant="accent" external icon="arrow" lang="da">Book tid</Button>
+          <Button href={anne.mobileHref} variant="outline" icon="phone" lang="da">{anne.mobile}</Button>
+        </div>
+      </div>
+      <div class="soon__block" lang="en">
+        <h2 class="display-m">New website coming soon</h2>
+        <p class="body measure">We are working on a new website. In the meantime, book online or call Anne.</p>
+      </div>
+      <p class="body-s soon__contact"><a href={`mailto:${anne.email}`}>{anne.email}</a> · CVR {site.cvr}</p>
+    </main>
+  </body>
+</html>
+
+<style>
+  .soon {
+    min-height: 100vh;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-9) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-7);
+  }
+  .soon__logo { width: 240px; height: auto; }
+  .soon__block { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .soon__contact { color: var(--tang-subtle); }
+  @media (max-width: 699px) { .soon { padding-block: var(--space-7); gap: var(--space-6); } }
+</style>

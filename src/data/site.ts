@@ -5,6 +5,8 @@ export const EASYME_URL = 'https://ezme.io/c/X6l/oaqf';
 export const site = {
   name: 'Hertzum Osteopati',
   cvr: '36257008',
+  /** Temporary: every page shows the holding page in src/views/ComingSoon.astro. Set to false to launch. */
+  comingSoon: true,
 };
 
 export const anne = {

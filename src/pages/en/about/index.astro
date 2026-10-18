@@ -1,5 +1,7 @@
 ---
 import About from '../../../views/About.astro';
+import ComingSoon from '../../../views/ComingSoon.astro';
+import { site } from '../../../data/site';
 ---
 
-<About lang="en" />
+{site.comingSoon ? <ComingSoon /> : <About lang="en" />}
